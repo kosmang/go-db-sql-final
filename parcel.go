@@ -109,7 +109,7 @@ func (s ParcelStore) Delete(number int) error {
 	}
 
 	if status != ParcelStatusRegistered {
-		return fmt.Errorf("Удалить невозможно, посылка имеет статус: %s", status)
+		return fmt.Errorf("ошибка: удалить невозможно, посылка имеет статус: %s", status)
 	}
 
 	_, err = s.db.Exec("DELETE FROM parcel WHERE number = ?", number)
