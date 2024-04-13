@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 )
 
@@ -88,7 +89,8 @@ func (s ParcelStore) SetAddress(number int, address string) error {
 	}
 
 	if status != ParcelStatusRegistered {
-		return fmt.Errorf("Адрес изменить невозможно, посылка имеет статус: %s", status)
+		err = errors.New(status)
+		return fmt.Errorf("ошибка: адрес изменить невозможно, посылка имеет статус: %w", err)
 	}
 
 	_, err = s.db.Exec("UPDATE parcel SET address = $1 WHERE number = $2", address, number)
@@ -109,7 +111,8 @@ func (s ParcelStore) Delete(number int) error {
 	}
 
 	if status != ParcelStatusRegistered {
-		return fmt.Errorf("ошибка: удалить невозможно, посылка имеет статус: %s", status)
+		err = errors.New(status)
+		return fmt.Errorf("ошибка: удалить невозможно, посылка имеет статус: %w", err)
 	}
 
 	_, err = s.db.Exec("DELETE FROM parcel WHERE number = ?", number)
